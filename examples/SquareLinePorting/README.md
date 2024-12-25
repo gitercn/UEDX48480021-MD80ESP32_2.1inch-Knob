@@ -34,7 +34,7 @@ Follow the steps below to configure:
 4. For **ESP32_Button**:
    - Just install it directly.
      
-5. Copy the [ui](./libraries/ui/) folder from `libraries` to `lvgl` and other libraries under the same level directory.Here I have put ui into the [`Libraries`](https://github.com/VIEWESMART/UEDX48480021-MD80ESP32_2.1inch-Knob/edit/main/Libraries).
+5. Copy the [ui](../../libraries/ui/) folder from `libraries` to `lvgl` and other libraries under the same level directory.Here I have put ui into the [`Libraries`](https://github.com/VIEWESMART/UEDX48480021-MD80ESP32_2.1inch-Knob/edit/main/Libraries).
 
 6. For **lvgl**:
 
