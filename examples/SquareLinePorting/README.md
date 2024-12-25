@@ -14,6 +14,7 @@ To use this example, please firstly install the following dependent libraries:
 - ESP32_IO_Expander (>= 0.1.0 && < 0.2.0)
 - ESP32_Knob (>= 0.1.3)
 - ESP32_Button (>= 3.1.2)
+- ui
 
 Follow the steps below to configure:
 
