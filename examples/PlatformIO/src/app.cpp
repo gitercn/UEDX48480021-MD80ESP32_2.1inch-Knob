@@ -8,13 +8,59 @@
 #include <ESP_Panel_Library.h>
 #include <lvgl.h>
 #include "lvgl_port_v8.h"
-
+#include <ESP_Knob.h>
+#include <Button.h>
+#include <ui.h>
 /**
 /* To use the built-in examples and demos of LVGL uncomment the includes below respectively.
  * You also need to copy `lvgl/examples` to `lvgl/src/examples`. Similarly for the demos `lvgl/demos` to `lvgl/src/demos`.
  */
 // #include <demos/lv_demos.h>
 // #include <examples/lv_examples.h>
+#ifdef KNOB21
+#define GPIO_NUM_KNOB_PIN_A     6
+#define GPIO_NUM_KNOB_PIN_B     5
+#define GPIO_BUTTON_PIN         GPIO_NUM_0
+#endif
+#ifdef KNOB13
+#define GPIO_NUM_KNOB_PIN_A     7
+#define GPIO_NUM_KNOB_PIN_B     6
+#define GPIO_BUTTON_PIN         GPIO_NUM_9
+#endif
+ESP_Knob *knob;
+
+void onKnobLeftEventCallback(int count, void *usr_data)
+{
+    Serial.printf("Detect left event, count is %d\n", count);
+    lvgl_port_lock(-1);
+    LVGL_knob_event((void*)KNOB_LEFT);
+    lvgl_port_unlock();
+}
+
+void onKnobRightEventCallback(int count, void *usr_data)
+{
+    Serial.printf("Detect right event, count is %d\n", count);
+    lvgl_port_lock(-1);
+    LVGL_knob_event((void*)KNOB_RIGHT);
+    lvgl_port_unlock();
+}
+
+static void SingleClickCb(void *button_handle, void *usr_data) {
+    Serial.println("Button Single Click");
+    lvgl_port_lock(-1);
+    LVGL_button_event((void*)BUTTON_SINGLE_CLICK);
+    lvgl_port_unlock();
+}
+static void DoubleClickCb(void *button_handle, void *usr_data)
+{
+    Serial.println("Button Double Click");
+}
+static void LongPressStartCb(void *button_handle, void *usr_data) {
+    Serial.println("Button Long Press Start");
+    lvgl_port_lock(-1);
+    LVGL_button_event((void*)BUTTON_LONG_PRESS_START);
+    lvgl_port_unlock();
+}
 
 void setup()
 {
@@ -45,6 +91,19 @@ void setup()
 #endif
     panel->begin();
 
+    Serial.println("Initialize Knob device");
+    knob = new ESP_Knob(GPIO_NUM_KNOB_PIN_A, GPIO_NUM_KNOB_PIN_B);
+    knob->begin();
+    knob->attachLeftEventCallback(onKnobLeftEventCallback);
+    knob->attachRightEventCallback(onKnobRightEventCallback);
+
+    Serial.println("Initialize Button device");
+    Button *btn = new Button(GPIO_BUTTON_PIN, false);
+
+    btn->attachSingleClickEventCb(&SingleClickCb, NULL);
+    btn->attachDoubleClickEventCb(&DoubleClickCb, NULL);
+    btn->attachLongPressStartEventCb(&LongPressStartCb, NULL);
+
     Serial.println("Initialize LVGL");
     lvgl_port_init(panel->getLcd(), panel->getTouch());
 
@@ -72,6 +131,7 @@ void setup()
     // lv_demo_benchmark();
     // lv_demo_music();
     // lv_demo_stress();
+    ui_init();
 
     /* Release the mutex */
     lvgl_port_unlock();
