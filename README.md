@@ -33,8 +33,8 @@
 ## Directory
 - [Describe](#describe)
 - [Module](#module)
-- [QuickStart](#quickstart)
 - [PinOverview](#pinoverview)
+- [QuickStart](#quickstart)
 - [FAQ](#faq)
 - [Schematic](#Schematic)
 - [Information](#information)
@@ -67,6 +67,51 @@ UEDX48480021-MD80ESP32_2.1inch-Knob-Display is a development board with square 2
 
 * Chip: No touch
 
+## PinOverview
+
+| IPS Screen Pin  | ESP32S3 Pin|
+| :------------------: | :------------------:|
+| DE         | IO17      |
+| VSYNC      | IO3       |
+| HSYNC      | IO46      |
+| PCLK       | IO9       |
+|   DATA0       |  IO10   | //B
+|   DATA1       |  IO11   |
+|   DATA2       |  IO12   |
+|   DATA3       |  IO13   |
+|   DATA4       |  IO14   |
+|   DATA5       |  IO21   |  //G
+|   DATA6       |  IO47   |
+|   DATA7       |  IO48   |
+|   DATA8       |  IO45   |
+|   DATA9       |  IO38   |
+|   DATA10      |  IO39   |
+|   DATA11      |  IO40   |  //R
+|   DATA12      |  IO41   |
+|   DATA13      |  IO42   |
+|   DATA14      |  IO2   |
+|   DATA15      |  IO1   |
+|   SPI_CS      |  IO18  |
+|   SPI_SCK     |  IO13  |
+|   SPI_SDA     |  IO12  |
+| RST        | IO8       |
+| BACKLIGHT  | IO7       |
+
+
+| button Pin  | ESP32S3 Pin|
+| :------------------: | :------------------:|
+|   boot    | IO0       |
+|   reset   | chip-en   |
+
+| Encoder Pin  | ESP32S3 Pin|
+| :------------------: | :------------------:|
+| PHA         | IO6       |
+| PHB         | IO5       |
+
+| USB/UART Pin  | ESP32S3 Pin|
+| :------------------: | :------------------:|
+| USB-DN         | IO19      |
+| USB-DP         | IO20      |
 
 ## QuickStart
 
@@ -144,54 +189,6 @@ UEDX48480021-MD80ESP32_2.1inch-Knob-Display is a development board with square 2
     <img src="image/10.png" alt="example">
     <img src="image/11.png" alt="example">
 </p>
-
-
-## PinOverview
-
-| IPS Screen Pin  | ESP32S3 Pin|
-| :------------------: | :------------------:|
-| DE         | IO17      |
-| VSYNC      | IO3       |
-| HSYNC      | IO46      |
-| PCLK       | IO9       |
-|   DATA0       |  IO10   | //B
-|   DATA1       |  IO11   |
-|   DATA2       |  IO12   |
-|   DATA3       |  IO13   |
-|   DATA4       |  IO14   |
-|   DATA5       |  IO21   |  //G
-|   DATA6       |  IO47   |
-|   DATA7       |  IO48   |
-|   DATA8       |  IO45   |
-|   DATA9       |  IO38   |
-|   DATA10      |  IO39   |
-|   DATA11      |  IO40   |  //R
-|   DATA12      |  IO41   |
-|   DATA13      |  IO42   |
-|   DATA14      |  IO2   |
-|   DATA15      |  IO1   |
-|   SPI_CS      |  IO18  |
-|   SPI_SCK     |  IO13  |
-|   SPI_SDA     |  IO12  |
-| RST        | IO8       |
-| BACKLIGHT  | IO7       |
-
-
-| button Pin  | ESP32S3 Pin|
-| :------------------: | :------------------:|
-|   boot    | IO0       |
-|   reset   | chip-en   |
-
-| Encoder Pin  | ESP32S3 Pin|
-| :------------------: | :------------------:|
-| PHA         | IO6       |
-| PHB         | IO5       |
-
-| USB/UART Pin  | ESP32S3 Pin|
-| :------------------: | :------------------:|
-| USB-DN         | IO19      |
-| USB-DP         | IO20      |
-
 
 ## FAQ
 
