@@ -221,8 +221,8 @@ UEDX48480021-MD80ESP32_2.1inch-Knob-Display is a development board with square 2
 ## DependentLibraries
 * [ESP32_Display_Panel>0.2.1](https://github.com/esp-arduino-libs/ESP32_Display_Panel) (Please [download](./Libraries/ESP32_Display_Panel) the library first as the latest version has not been released yet)
 * [ESP32_IO_Expander](https://github.com/esp-arduino-libs/ESP32_IO_Expander) (Please [download](./Libraries/ESP32_IO_Expander) the library first as the latest version has not been released yet)
-* [NTPClient-3.2.1](https://github.com/bitbank2/JPEGDEC)
-* [ArduinoJson-6.21.3](https://github.com/bblanchon/ArduinoJson.git)
+* [ESP32_Button](https://github.com/esp-arduino-libs/ESP32_Button)
+* [ESP32_Knob](https://github.com/esp-arduino-libs/ESP32_Knob)
 * [lvgl-8.4.0](https://lvgl.io)
 
 
