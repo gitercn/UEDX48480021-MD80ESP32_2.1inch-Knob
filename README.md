@@ -210,13 +210,13 @@ UEDX48480021-MD80ESP32_2.1inch-Knob-Display is a development board with square 2
 </p>
 
 ## Information
-[products specification](information/UEDX80480070E-WB-A%20V2.0%20SPEC.pdf)
+[products specification](information/UEDX48480021-MD80E%20V3.3%20SPEC.pdf)
 
-[Display Datasheet](information/ALL-UE070WV-RB40-A092A.pdf)
+[Display Datasheet](information/UE021WV-RB40-L002B.pdf)
 
-[button](information/C2843785_RGB%2BLED(Built-in%20IC)_XL-5050RGBC-WS2812B_specification_WJ1123912.PDF)
+[button](information/6x6Silent%20switch.pdf)
 
-[Encoder](information/C84681_USB%20Conversion%20chip_CH340C_specification_WJ1187874.PDF)
+[Encoder](information/C219783_%E6%97%8B%E8%BD%AC%E7%BC%96%E7%A0%81%E5%99%A8_EC28A1520401_%E8%A7%84%E6%A0%BC%E4%B9%A6_WJ239718.PDF)
 
 ## DependentLibraries
 * [ESP32_Display_Panel>0.2.1](https://github.com/esp-arduino-libs/ESP32_Display_Panel) (Please [download](./Libraries/ESP32_Display_Panel) the library first as the latest version has not been released yet)
