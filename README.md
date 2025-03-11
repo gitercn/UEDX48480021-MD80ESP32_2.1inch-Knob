@@ -112,6 +112,8 @@ UEDX48480021-MD80ESP32_2.1inch-Knob-Display is a development board with square 2
 | :------------------: | :------------------:|
 | USB-DN         | IO19      |
 | USB-DP         | IO20      |
+| UART RX        | IO43      |
+| UART TX        | IO44      |
 
 ## QuickStart
 
