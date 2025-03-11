@@ -16,6 +16,32 @@
      - Different display driver chips (GC9503CV vs. ST7701S)
      - **Firmware and libraries are NOT interchangeable**
 
+## Hardware Details & Recovery
+
+### Internal Structure Reference
+For hardware debugging or customization, below are the internal component references:
+
+<p align="center" width="100%">
+    <img src="image/disassembled-internal-picture-1.jpg" alt="Internal Component View 1" width="45%">
+    <img src="image/disassembled-internal-picture-2.jpg" alt="Internal Component View 2" width="45%">
+</p>
+
+---
+
+### TTL Recovery Mode
+If the device becomes unresponsive due to firmware issues, use TTL-to-USB converter (e.g., CH340G module) for recovery:
+
+ **Wiring Guide**:  
+   Follow the pin mapping shown below:  
+   <p align="center" width="60%">
+       <img src="image/ttl-pins.jpg" alt="TTL Recovery Wiring" >
+   </p>
+
+ **Recovery Steps**:
+   - Connect TTL module to PC and open serial terminal (115200 baud)
+   - **Hold the center knob button** (BOOT/IO0) while powering on the board
+
+> 💡 **Note**: The center knob button is hardwired to `IO0` for forced download mode.
 
 ## Introduction to the Repository Directory
 
