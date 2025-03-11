@@ -7,6 +7,16 @@
 
 ## **English | [中文](./README_CN.md)**
 
+## ⚠️ Notes
+**Hardware Differentiation**  
+   This repository is for **non-touch version** knob hardware. For touch-enabled version of the similar knob, refer to:  
+   [UEDX48480021-MD80ESP32-2.1inch-Touch-Knob-Display](https://github.com/VIEWESMART/UEDX48480021-MD80ESP32-2.1inch-Touch-Knob-Display)  
+   - **Key Differences**:
+     - Touch vs. Non-touch
+     - Different display driver chips (GC9503CV vs. ST7701S)
+     - **Firmware and libraries are NOT interchangeable**
+
+
 ## Introduction to the Repository Directory
 
 ```
@@ -129,17 +139,9 @@ UEDX48480021-MD80ESP32_2.1inch-Knob-Display is a development board with square 2
 | ------  | ------  | ------ |
 | [ESP-IDF]() | Original |  |
 
-### PlatformIO
-1. Install[VisualStudioCode](https://code.visualstudio.com/Download),Choose installation based on your system type.
-
-2. Open the "Extension" section of the Visual Studio Code software sidebar(Alternatively, use "<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>" to open the extension),Search for the "PlatformIO IDE" extension and download it.
-
-3. During the installation of the extension, you can go to GitHub to download the program. You can download the main branch by clicking on the "<> Code" with green text.
-
-4. After the installation of the extension is completed, open the Explorer in the sidebar(Alternatively, use "<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd>" go open it),Click "Open Folder", find the project code you just downloaded (the entire folder), then find the PlatformIO folder and click "Add". At this point, the project file will be added to your workspace.
-
-5. Open the "platformio.ini" file in the project folder (PlatformIO will automatically open the "platformio.ini" file corresponding to the added folder). Under the "[platformio]" section, uncomment and select the example program you want to burn (it should start with "default_envs = xxx") Then click "<kbd>[√](image/4.png)</kbd>" in the bottom left corner to compile,If the compilation is correct, connect the microcontroller to the computer and click "<kbd>[→](image/5.png)</kbd>" in the bottom left corner to download the program.
-
+### ESP-IDF
+1. Install [ESP-IDF v5.1/5.2/5.3](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/get-started/)
+2. Navigate to `examples/ESP-IDF`
 ### Arduino
 1. Install[Arduino](https://www.arduino.cc/en/software),Choose installation based on your system type.
 
@@ -157,7 +159,7 @@ UEDX48480021-MD80ESP32_2.1inch-Knob-Display is a development board with square 2
 | Board                                 | ESP32S3 Dev Module           |
 | CPU Frequency                   | 240MHz (WiFi)                    |
 | Core Debug Level                | None                                 |
-| USB CDC On Boot                | Disabled                              |
+| USB CDC On Boot                | Enabled                              |
 | USB DFU On Boot                | Disabled                             |
 | Events Run On                     | Core 1                               |  
 | Flash Mode                         | QIO 80MHz                         |
@@ -221,7 +223,7 @@ UEDX48480021-MD80ESP32_2.1inch-Knob-Display is a development board with square 2
 [Encoder](information/C219783_%E6%97%8B%E8%BD%AC%E7%BC%96%E7%A0%81%E5%99%A8_EC28A1520401_%E8%A7%84%E6%A0%BC%E4%B9%A6_WJ239718.PDF)
 
 ## DependentLibraries
-* [ESP32_Display_Panel>0.2.1](https://github.com/esp-arduino-libs/ESP32_Display_Panel) (Please [download](./Libraries/ESP32_Display_Panel) the library first as the latest version has not been released yet)
+* [ESP32_Display_Panel>0.2.1](https://github.com/esp-arduino-libs/ESP32_Display_Panel) (Please [download](./Libraries/ESP32_Display_Panel) the library first as the official version of ESP32_Display_Panel that support the knob hardware has not been released yet)
 * [ESP32_IO_Expander](https://github.com/esp-arduino-libs/ESP32_IO_Expander) (Please [download](./Libraries/ESP32_IO_Expander) the library first as the latest version has not been released yet)
 * [ESP32_Button](https://github.com/esp-arduino-libs/ESP32_Button)
 * [ESP32_Knob](https://github.com/esp-arduino-libs/ESP32_Knob)
