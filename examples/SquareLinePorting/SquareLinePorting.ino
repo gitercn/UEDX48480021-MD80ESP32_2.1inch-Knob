@@ -1,53 +1,3 @@
-/**
- * # LVGL Porting Example
- *
- * The example demonstrates how to port LVGL(v8). And for RGB LCD, it can enable the avoid tearing function.
- *
- * ## How to Use
- *
- * To use this example, please firstly install the following dependent libraries:
- *
- * - lvgl (>= v8.3.9, < v9)
- *
- * Then follow the steps below to configure:
- *
- * Follow the steps below to configure:
- *
- * 1. For **ESP32_Display_Panel**:
- *
- *     - Follow the [steps](https://github.com/esp-arduino-libs/ESP32_Display_Panel/blob/master/docs/How_To_Use.md#configuring-drivers) to configure drivers if needed.
- *     - If using a supported development board, follow the [steps](https://github.com/esp-arduino-libs/ESP32_Display_Panel/blob/master/docs/How_To_Use.md#using-supported-development-boards) to configure it.
- *     - If using a custom board, follow the [steps](https://github.com/esp-arduino-libs/ESP32_Display_Panel/blob/master/docs/How_To_Use.md#using-custom-development-boards) to configure it.
- *
- * 2. For **lvgl**:
- *
- *     - Follow the [steps](https://github.com/esp-arduino-libs/ESP32_Display_Panel/blob/master/docs/How_To_Use.md#configuring-lvgl) to add *lv_conf.h* file and change the configurations.
- *     - Modify the macros in the [lvgl_port_v8.h](./lvgl_port_v8.h) file to configure the LVGL porting parameters.
- *
- * 3. Navigate to the `Tools` menu in the Arduino IDE to choose a ESP board and configure its parameters. For supported
- *    boards, please refter to [Configuring Supported Development Boards](https://github.com/esp-arduino-libs/ESP32_Display_Panel/blob/master/docs/How_To_Use.md#configuring-supported-development-boards)
- * 4. Verify and upload the example to your ESP board.
- *
- * ## Serial Output
- *
- * ```bash
- * ...
- * LVGL porting example start
- * Initialize panel device
- * Initialize LVGL
- * Create UI
- * LVGL porting example end
- * IDLE loop
- * IDLE loop
- * ...
- * ```
- *
- * ## Troubleshooting
- *
- * Please check the [FAQ](https://github.com/esp-arduino-libs/ESP32_Display_Panel/blob/master/docs/FAQ.md) first to see if the same question exists. If not, please create a [Github issue](https://github.com/esp-arduino-libs/ESP32_Display_Panel/issues). We will get back to you as soon as possible.
- *
- */
-
 #include <Arduino.h>
 #include <ESP_Panel_Library.h>
 #include <lvgl.h>
@@ -55,148 +5,149 @@
 #include <ESP_Knob.h>
 #include <Button.h>
 #include <ui.h>
-/**
-/* To use the built-in examples and demos of LVGL uncomment the includes below respectively.
- * You also need to copy `lvgl/examples` to `lvgl/src/examples`. Similarly for the demos `lvgl/demos` to `lvgl/src/demos`.
- */
-// #include <demos/lv_demos.h>
-// #include <examples/lv_examples.h>
+
+// 新增全局变量
+#define MESSAGE_GEAR_SHIFT "KNOB_GEAR_SHIFT::"
+#define MESSAGE_KNOB_VALUE "KNOB_VALUE::"
+#define MESSAGE_KNOB_ROTATE "KNOB_ROTATE::"
+#define MESSAGE_KNOB_PUSH "KNOB_PUSH::-"
+#define MESSAGE_KNOB_PUSH_DOUBLE "KNOB_PUSH_DOUBLE::-"
+#define MESSAGE_KNOB_LONG "KNOB_LONG_PRESS::-"
+
+int encoder = 0;
+int knob_value = 0;
+const char *GEARS = "PRND";
+char last_gear[2] = "P";
+
+// LVGL 组件定义
+lv_obj_t *label_gear;
+lv_obj_t *label_encoder;
+
 #ifdef KNOB21
-#define GPIO_NUM_KNOB_PIN_A     6
-#define GPIO_NUM_KNOB_PIN_B     5
-#define GPIO_BUTTON_PIN         GPIO_NUM_0
+#define GPIO_NUM_KNOB_PIN_A 6
+#define GPIO_NUM_KNOB_PIN_B 5
+#define GPIO_BUTTON_PIN GPIO_NUM_0
 #endif
-#ifdef KNOB13
-#define GPIO_NUM_KNOB_PIN_A     7
-#define GPIO_NUM_KNOB_PIN_B     6
-#define GPIO_BUTTON_PIN         GPIO_NUM_9
-#endif
+
 ESP_Knob *knob;
+Button *btn;
 
+// 更新 LVGL 显示内容
+void update_display() {
+  // 计算档位
+  int idx = encoder / 4;
+  idx = idx < 0 ? 0 : idx;
+  idx = idx > 3 ? 3 : idx;
+  char gear = GEARS[idx];
+  char gearStr[2] = { gear, '\0' };
 
-/*Initialize UI start*/
-/*Initialize UI end*/
+  // 更新档位标签
+  lv_label_set_text(label_gear, gearStr);
 
-void onKnobLeftEventCallback(int count, void *usr_data)
-{
-    Serial.printf("Detect left event, count is %d\n", count);
-    lvgl_port_lock(-1);
-    LVGL_knob_event((void*)KNOB_LEFT);
-    lvgl_port_unlock();
+  // 更新编码器值标签
+  char encoder_str[4];
+  snprintf(encoder_str, 4, "%d", encoder);
+  lv_label_set_text(label_encoder, encoder_str);
+
+  // 串口输出
+  if (strcmp(last_gear, gearStr)) {
+    strcpy(last_gear, gearStr);
+    Serial.printf("%s%s\n", MESSAGE_GEAR_SHIFT, last_gear);
+  }
+  Serial.printf("%s%d\n", MESSAGE_KNOB_VALUE, knob_value);
 }
 
-void onKnobRightEventCallback(int count, void *usr_data)
-{
-    Serial.printf("Detect right event, count is %d\n", count);
-    lvgl_port_lock(-1);
-    LVGL_knob_event((void*)KNOB_RIGHT);
-    lvgl_port_unlock();
+// 旋钮事件回调
+void onKnobLeftEventCallback(int count, void *usr_data) {
+  encoder--;
+  knob_value--;
+  encoder = encoder < 0 ? 0 : encoder;
+  Serial.printf("%s-\n", MESSAGE_KNOB_ROTATE);
+
+  lvgl_port_lock(-1);
+  update_display();
+  lvgl_port_unlock();
 }
 
+void onKnobRightEventCallback(int count, void *usr_data) {
+  encoder++;
+  knob_value++;
+  encoder = encoder > 19 ? 19 : encoder;
+  Serial.printf("%s+\n", MESSAGE_KNOB_ROTATE);
+
+  lvgl_port_lock(-1);
+  update_display();
+  lvgl_port_unlock();
+}
+
+// 按钮事件回调
 static void SingleClickCb(void *button_handle, void *usr_data) {
-    Serial.println("Button Single Click");
-    lvgl_port_lock(-1);
-    LVGL_button_event((void*)BUTTON_SINGLE_CLICK);
-    lvgl_port_unlock();
+  Serial.println(MESSAGE_KNOB_PUSH);
+  lvgl_port_lock(-1);
+
+  lvgl_port_unlock();
 }
-static void DoubleClickCb(void *button_handle, void *usr_data)
-{
-    Serial.println("Button Double Click");
+
+static void DoubleClickCb(void *button_handle, void *usr_data) {
+  Serial.println(MESSAGE_KNOB_PUSH_DOUBLE);
+  lvgl_port_lock(-1);
+
+  lvgl_port_unlock();
 }
+
+
 static void LongPressStartCb(void *button_handle, void *usr_data) {
-    Serial.println("Button Long Press Start");
-    lvgl_port_lock(-1);
-    LVGL_button_event((void*)BUTTON_LONG_PRESS_START);
-    lvgl_port_unlock();
+  Serial.println(MESSAGE_KNOB_LONG);
+  lvgl_port_lock(-1);
+  // 此处可添加按钮长按的 UI 操作
+  lvgl_port_unlock();
 }
 
-void setup()
-{
-    String title = "LVGL porting example";
-#ifdef IM
-    pinMode(IM1, OUTPUT);
-    digitalWrite(IM1, HIGH);
-  #ifdef BOARD_VIEWE_ESP_S3_Touch_LCD_35_V2
-    pinMode(IM0, OUTPUT);
-    digitalWrite(IM0, HIGH);
-  #endif
-  #ifndef BOARD_VIEWE_ESP_S3_Touch_LCD_35_V2
-    pinMode(IM0, OUTPUT);
-    digitalWrite(IM0, LOW);
-  #endif
-#endif
+void setup() {
+  Serial.begin(115200);
+  Serial.println("LVGL Gear Shift Demo");
 
-    Serial.begin(115200);
-    Serial.println(title + " start");
+  // 初始化硬件
+  ESP_Panel *panel = new ESP_Panel();
+  panel->init();
+  panel->begin();
 
-    Serial.println("Initialize panel device");
-    ESP_Panel *panel = new ESP_Panel();
-    panel->init();
-#if LVGL_PORT_AVOID_TEAR
-    // When avoid tearing function is enabled, configure the bus according to the LVGL configuration
-    ESP_PanelBus *lcd_bus = panel->getLcd()->getBus();
-#if ESP_PANEL_LCD_BUS_TYPE == ESP_PANEL_BUS_TYPE_RGB
-    static_cast<ESP_PanelBus_RGB *>(lcd_bus)->configRgbBounceBufferSize(LVGL_PORT_RGB_BOUNCE_BUFFER_SIZE);
-    static_cast<ESP_PanelBus_RGB *>(lcd_bus)->configRgbFrameBufferNumber(LVGL_PORT_DISP_BUFFER_NUM);
-#elif ESP_PANEL_LCD_BUS_TYPE == ESP_PANEL_BUS_TYPE_MIPI_DSI
-    static_cast<ESP_PanelBus_DSI *>(lcd_bus)->configDpiFrameBufferNumber(LVGL_PORT_DISP_BUFFER_NUM);
-#endif
-#endif
-    panel->begin();
+  // 初始化旋钮
+  knob = new ESP_Knob(GPIO_NUM_KNOB_PIN_A, GPIO_NUM_KNOB_PIN_B);
+  knob->begin();
+  knob->attachLeftEventCallback(onKnobLeftEventCallback);
+  knob->attachRightEventCallback(onKnobRightEventCallback);
 
-    Serial.println("Initialize Knob device");
-    knob = new ESP_Knob(GPIO_NUM_KNOB_PIN_A, GPIO_NUM_KNOB_PIN_B);
-    knob->begin();
-    knob->attachLeftEventCallback(onKnobLeftEventCallback);
-    knob->attachRightEventCallback(onKnobRightEventCallback);
+  // 初始化按钮
+  btn = new Button(GPIO_BUTTON_PIN, false);
+  btn->attachSingleClickEventCb(&SingleClickCb, NULL);
+  btn->attachDoubleClickEventCb(&DoubleClickCb, NULL);
+  btn->attachLongPressStartEventCb(&LongPressStartCb, NULL);
 
-    Serial.println("Initialize Button device");
-    Button *btn = new Button(GPIO_BUTTON_PIN, false);
+  // 初始化 LVGL
+  lvgl_port_init(panel->getLcd(), panel->getTouch());
 
-    btn->attachSingleClickEventCb(&SingleClickCb, NULL);
-    btn->attachDoubleClickEventCb(&DoubleClickCb, NULL);
-    btn->attachLongPressStartEventCb(&LongPressStartCb, NULL);
+  // 创建 UI 组件
+  lvgl_port_lock(-1);
+  lv_obj_set_style_bg_color(lv_scr_act(), lv_color_hex(0xC0C0C0), LV_PART_MAIN);
 
-    Serial.println("Initialize LVGL");
-    lvgl_port_init(panel->getLcd(), panel->getTouch());
+  // 档位标签（大字体居中）
+  label_gear = lv_label_create(lv_scr_act());
+  lv_obj_set_style_text_font(label_gear, &lv_font_montserrat_40, LV_PART_MAIN);
+  lv_label_set_text(label_gear, "P");
+  lv_obj_align(label_gear, LV_ALIGN_CENTER, -10, -50);
+  lv_obj_set_style_transform_zoom(label_gear, 500, LV_PART_MAIN);
 
-    Serial.println("Create UI");
-    /* Lock the mutex due to the LVGL APIs are not thread-safe */
-    lvgl_port_lock(-1);
 
-    /**
-     * Create a simple label
-     *
-     */
-    // lv_obj_t *label = lv_label_create(lv_scr_act());
-    // lv_label_set_text(label, title.c_str());
-    // lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
-  
-    /**
-     * Try an example. Don't forget to uncomment header.
-     * See all the examples online: https://docs.lvgl.io/master/examples.html
-     * source codes: https://github.com/lvgl/lvgl/tree/e7f88efa5853128bf871dde335c0ca8da9eb7731/examples
-     */
-    //  lv_example_btn_1();
+  // 编码器值标签（底部显示）
+  label_encoder = lv_label_create(lv_scr_act());
+  lv_obj_set_style_text_font(label_encoder, &lv_font_montserrat_20, LV_PART_MAIN);
+  lv_label_set_text(label_encoder, "0");
+  lv_obj_align(label_encoder, LV_ALIGN_BOTTOM_MID, 0, -20);
 
-    /**
-     * Or try out a demo.
-     * Don't forget to uncomment header and enable the demos in `lv_conf.h`. E.g. `LV_USE_DEMO_WIDGETS`
-     */
-    // lv_demo_widgets();
-    // lv_demo_benchmark();
-    // lv_demo_music();
-    // lv_demo_stress();
-    ui_init();
-
-    /* Release the mutex */
-    lvgl_port_unlock();
-
-    Serial.println(title + " end");
+  lvgl_port_unlock();
 }
 
-void loop()
-{
-    Serial.println("IDLE loop");
-    delay(50);
+void loop() {
+  delay(10);
 }
