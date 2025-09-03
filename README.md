@@ -16,7 +16,48 @@
      - Different display driver chips (GC9503CV vs. ST7701S)
      - **Firmware and libraries are NOT interchangeable**
 
-## Hardware Details & Recovery
+## QuickStart
+
+### Arduino example project 
+1. Install [Arduino](https://www.arduino.cc/en/software) and open it.
+
+2. Open the `example` directory in the project folder, select the `SquareLinePorting` project folder, and then open the `SquareLinePorting.ino` file to open the Arduino IDE project workspace.
+
+3. Open the `Tools` menu in the upper right -> select `Board` -> `Board Manager`. Search for `esp32` and download the board files authored by **Espressif Systems** (It's recommended to use 3.0.7 version, newer versions maybe not work.).
+   After installation, go back to the `Board` menu, and under the `esp32` category, select the `ESP32S3 Dev Module` board.
+
+4. In the `Tools` menu, check and select the correct settings as shown in the table below.
+
+#### ESP32-S3
+
+|          Setting         |              Value              |
+| :----------------------: | :-----------------------------: |
+|           Board          |        ESP32S3 Dev Module       |
+|       CPU Frequency      |          240MHz (WiFi)          |
+|     Core Debug Level     |               None              |
+|      USB CDC On Boot     |             Enabled             |
+|      USB DFU On Boot     |             Disabled            |
+|       Events Run On      |              Core 1             |
+|        Flash Mode        |            QIO 80MHz            |
+|        Flash Size        |           16MB (128Mb)          |
+|      Arduino Runs On     |              Core 1             |
+| USB Firmware MSC On Boot |             Disabled            |
+|     Partition Scheme     | 16M Flash (3MB APP/9.9MB FATFS) |
+|           PSRAM          |            OPI PSRAM            |
+|        Upload Mode       |        UART0/Hardware CDC       |
+|       Upload Speed       |              921600             |
+|         USB Mode         |      Hardware CDC and JTAG      |
+
+5. In the `Tools` -> `Port` menu, select the correct port.
+
+6. Open the menu bar **[File](image/6.png)** -> **[Preferences](image/6.png)**, find **[Sketchbook location](image/7.png)**,
+   copy all library files and folders from the **Libraries** folder in the project directory into the **libraries** folder in this directory (the default location on Windows is `C:\Users\<username>\Documents\Arduino\libraries`).
+
+7. Click the <kbd>[√](image/8.png)</kbd> button in the upper right corner to compile.
+   If the compilation is successful, connect the microcontroller to the computer with a data cable,
+   then click the <kbd>[→](image/9.png)</kbd> button in the upper right corner to upload the program.
+
+## Reference: Hardware Details & Recovery
 
 ### Internal Structure Reference
 For hardware debugging or customization, below are the internal component references:
@@ -43,7 +84,8 @@ If the device becomes unresponsive due to firmware issues, use TTL-to-USB conver
 
 > 💡 **Note**: The center knob button is hardwired to `IO0` for forced download mode.
 
-## Introduction to the Repository Directory
+
+## References: Introduction to the Repository Directory
 
 ```
 ├── Libraries                 Library files required for the Arduino example  
@@ -56,15 +98,15 @@ If the device becomes unresponsive due to firmware issues, use TTL-to-USB conver
 ```
 
 ## Version iteration:
-|   Development board Version   |  Screen size   |   Resolution  | Update date        |Update description|
-| :-------------------------------: | :-------------------------------: | :-------------------------------: | :-------------------------------: |:-------------------------------: |
-| UEDX48480021-MD80E | 2.1-inch |  480*480  |2024-07-23      | Original version   |
+| Development board Version | Screen size | Resolution | Update date | Update description |
+| :-----------------------: | :---------: | :--------: | :---------: | :----------------: |
+|    UEDX48480021-MD80E     |  2.1-inch   |  480*480   | 2024-07-23  |  Original version  |
 
 ## PurchaseLink
 
-| Product                     | SOC           |  FLASH  |  PSRAM   | Link                   |
-| :------------------------: | :-----------: |:-------: | :---------: | :------------------: |
-| UEDX48480021-MD80E   | ESP32S3R8 |   16M   | 8M (Octal SPI) | [VIEWE Mall](https://viewedisplay.com/product/esp32-7-inch-800x480-rgb-ips-tft-display-touch-screen-arduino-lvgl-uart/)  |
+|      Product       |    SOC    | FLASH |     PSRAM      |                                                          Link                                                           |
+| :----------------: | :-------: | :---: | :------------: | :---------------------------------------------------------------------------------------------------------------------: |
+| UEDX48480021-MD80E | ESP32S3R8 |  16M  | 8M (Octal SPI) | [VIEWE Mall](https://viewedisplay.com/product/esp32-7-inch-800x480-rgb-ips-tft-display-touch-screen-arduino-lvgl-uart/) |
 
 ## Directory
 - [Describe](#describe)
@@ -105,102 +147,54 @@ UEDX48480021-MD80ESP32_2.1inch-Knob-Display is a development board with square 2
 
 ## PinOverview
 
-| IPS Screen Pin  | ESP32S3 Pin|
-| :------------------: | :------------------:|
-| DE         | IO17      |
-| VSYNC      | IO3       |
-| HSYNC      | IO46      |
-| PCLK       | IO9       |
-|   DATA0       |  IO10   | //B
-|   DATA1       |  IO11   |
-|   DATA2       |  IO12   |
-|   DATA3       |  IO13   |
-|   DATA4       |  IO14   |
-|   DATA5       |  IO21   |  //G
-|   DATA6       |  IO47   |
-|   DATA7       |  IO48   |
-|   DATA8       |  IO45   |
-|   DATA9       |  IO38   |
-|   DATA10      |  IO39   |
-|   DATA11      |  IO40   |  //R
-|   DATA12      |  IO41   |
-|   DATA13      |  IO42   |
-|   DATA14      |  IO2   |
-|   DATA15      |  IO1   |
-|   SPI_CS      |  IO18  |
-|   SPI_SCK     |  IO13  |
-|   SPI_SDA     |  IO12  |
-| RST        | IO8       |
-| BACKLIGHT  | IO7       |
+| IPS Screen Pin | ESP32S3 Pin |
+| :------------: | :---------: |
+|       DE       |    IO17     |
+|     VSYNC      |     IO3     |
+|     HSYNC      |    IO46     |
+|      PCLK      |     IO9     |
+|     DATA0      |    IO10     | //B
+|     DATA1      |    IO11     |
+|     DATA2      |    IO12     |
+|     DATA3      |    IO13     |
+|     DATA4      |    IO14     |
+|     DATA5      |    IO21     |  //G
+|     DATA6      |    IO47     |
+|     DATA7      |    IO48     |
+|     DATA8      |    IO45     |
+|     DATA9      |    IO38     |
+|     DATA10     |    IO39     |
+|     DATA11     |    IO40     |  //R
+|     DATA12     |    IO41     |
+|     DATA13     |    IO42     |
+|     DATA14     |     IO2     |
+|     DATA15     |     IO1     |
+|     SPI_CS     |    IO18     |
+|    SPI_SCK     |    IO13     |
+|    SPI_SDA     |    IO12     |
+|      RST       |     IO8     |
+|   BACKLIGHT    |     IO7     |
 
 
-| button Pin  | ESP32S3 Pin|
-| :------------------: | :------------------:|
-|   boot    | IO0       |
-|   reset   | chip-en   |
+| button Pin | ESP32S3 Pin |
+| :--------: | :---------: |
+|    boot    |     IO0     |
+|   reset    |   chip-en   |
 
-| Encoder Pin  | ESP32S3 Pin|
-| :------------------: | :------------------:|
-| PHA         | IO6       |
-| PHB         | IO5       |
+| Encoder Pin | ESP32S3 Pin |
+| :---------: | :---------: |
+|     PHA     |     IO6     |
+|     PHB     |     IO5     |
 
-| USB/UART Pin  | ESP32S3 Pin|
-| :------------------: | :------------------:|
-| USB-DN         | IO19      |
-| USB-DP         | IO20      |
-| UART RX        | IO43      |
-| UART TX        | IO44      |
-
-## QuickStart
-
-### Examples Support
-
-| Example | Support IDE And Version| Description | Picture |
-| ------  | ------  | ------ | ------ | 
-| [ESP-IDF](./examples/ESP-IDF) | `[ESP-IDF V5.1/5.2/5.3]` | idf driver example code |  |
-| [SquareLinePorting](./examples/SquareLinePorting) | `[Arduino IDE][esp32_v2.0.14]` | SquareLine porting example for Arduino |  |
+| USB/UART Pin | ESP32S3 Pin |
+| :----------: | :---------: |
+|    USB-DN    |    IO19     |
+|    USB-DP    |    IO20     |
+|   UART RX    |    IO43     |
+|   UART TX    |    IO44     |
 
 
-| Firmware | Description | Picture |
-| ------  | ------  | ------ |
-| [ESP-IDF]() | Original |  |
 
-### ESP-IDF
-1. Install [ESP-IDF v5.1/5.2/5.3](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/get-started/)
-2. Navigate to `examples/ESP-IDF`
-### Arduino
-1. Install[Arduino](https://www.arduino.cc/en/software),Choose installation based on your system type.
-
-2. Open the "example" directory within the project folder, select the example project folder, and open the file ending with ".ino" to open the Arduino IDE project workspace.
-
-3. Open the "Tools" menu at the top right -> Select "Board" -> "Board Manager." Find or search for "esp32" and download the board files from the author named "Espressif Systems." Then, go back to the "Board" menu and select the development board type under "ESP32 Arduino." The selected development board type should match the one specified in the "platformio.ini" file under the [env] section with the header "board = xxx." If there is no corresponding development board, you may need to manually add the development board from the "board" directory within your project folder.
-
-4. Open menu bar "[File](image/6.png)" -> "[Preferences](image/6.png)" ,Find "[Sketchbook location](image/7.png)"  here,copy and paste all library files and folders from the "libraries" folder in the project directory into the "libraries" folder in this directory.
-
-5. Select the correct settings in the Tools menu, as shown in the table below.
-
-#### ESP32-S3
-| Setting                               | Value                                 |
-| :-------------------------------: | :-------------------------------: |
-| Board                                 | ESP32S3 Dev Module           |
-| CPU Frequency                   | 240MHz (WiFi)                    |
-| Core Debug Level                | None                                 |
-| USB CDC On Boot                | Enabled                              |
-| USB DFU On Boot                | Disabled                             |
-| Events Run On                     | Core 1                               |  
-| Flash Mode                         | QIO 80MHz                         |
-| Flash Size                           | 16MB (128Mb)                    |
-| Arduino Runs On                  | Core 1                               |
-| USB Firmware MSC On Boot | Disabled                             |
-| Partition Scheme                | 16M Flash (3MB APP/9.9MB FATFS) |
-| PSRAM                                | OPI PSRAM                         |
-| Upload Mode                     |     UART0/Hardware CDC            |
-| Upload Speed                     | 921600                               |
-| USB Mode                           | Hardware CDC and JTAG     |
-
-6. Select the correct port.
-
-7. Click "<kbd>[√](image/8.png)</kbd>" in the upper right corner to compile,If the compilation is correct, connect the microcontroller to the computer,Click "<kbd>[→](image/9.png)</kbd>" in the upper right corner to download.
 
 ### firmware download
 1. Open the project file "tools" and locate the ESP32 burning tool. Open it.
